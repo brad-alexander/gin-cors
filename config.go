@@ -17,6 +17,7 @@ type cors struct {
 	preflightHeaders           http.Header
 	wildcardOrigins            [][]string
 	optionsResponseStatusCode  int
+	allowPaths                 []string
 }
 
 var (
@@ -64,10 +65,23 @@ func newCors(config Config) *cors {
 		preflightHeaders:           generatePreflightHeaders(config),
 		wildcardOrigins:            config.parseWildcardRules(),
 		optionsResponseStatusCode:  config.OptionsResponseStatusCode,
+		allowPaths:                 config.AllowPaths,
 	}
 }
 
+func contains(slice []string, str string) bool {
+	for _, v := range slice {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}
+
 func (cors *cors) applyCors(c *gin.Context) {
+	if (len(cors.allowPaths) > 0 && !contains(cors.allowPaths, c.Request.URL.Path)) {
+		return
+	}
 	origin := c.Request.Header.Get("Origin")
 	if len(origin) == 0 {
 		// request is not a CORS request

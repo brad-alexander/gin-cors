@@ -69,6 +69,9 @@ type Config struct {
 
 	// Allows to pass custom OPTIONS response status code for old browsers / clients
 	OptionsResponseStatusCode int
+
+	// AllowPaths is a list of paths that can be accessed from the origin.
+	AllowPaths []string
 }
 
 // AddAllowMethods is allowed to add custom methods

@@ -1,4 +1,4 @@
-module github.com/gin-contrib/cors
+module github.com/brad-alexander/gin-cors
 
 go 1.20
 
